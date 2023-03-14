@@ -1,0 +1,114 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 function checkCashRegister(price, cash, cid) \{\
+  let change = []\
+  let rem = (cash * 100 - price * 100);\
+  let funds = (cid[8][1] + cid[7][1] + cid[6][1] + cid[5][1] + cid[4][1] + cid[3][1] + cid[2][1] + cid[1][1] + cid[0][1]) * 100;\
+  let orgRem = rem;\
+  let dime = 0;\
+  let quarter = 0;\
+  let hundred = 0;\
+  let twenty = 0;\
+  let ten = 0;\
+  let five = 0;\
+  let one = 0;\
+  let hunPenny = 0;\
+  let hunNickel = 0;\
+  for (let i = 1; i <= rem / 10000; i++) \{\
+   hundred += 100;\
+   if (cid[8][1] - hundred >= 0) \{\
+     rem -= 10000;\
+   \} \
+ \} \
+     change.push(["ONE HUNDRED", hundred])\
+\
+  let hunRem = rem;\
+  for (let i = 1; i <= hunRem / 2000; i++) \{\
+   if (cid[7][1] - twenty >= 20) \{\
+    twenty += 20;\
+     rem -= 2000;\
+     //push twenty\
+ \} \
+ \} change.push(["TWENTY", twenty])\
+  let tweRem = rem;\
+  for (let i = 1; i <= tweRem / 1000; i++) \{\
+   if (cid[6][1] - ten >= 10) \{\
+    ten += 10;\
+     rem -= 1000;\
+     //push twenty\
+ \}\
+ \} change.push(["TEN", ten])\
+  let tenRem = rem;\
+  for (let i = 1; i <= tenRem / 500; i++) \{\
+   if (cid[5][1] - five >= 5) \{\
+    five += 5;\
+     rem -= 500;\
+     //push twenty\
+ \}\
+ \} change.push(["FIVE", five])\
+  let fivRem = rem;\
+  for (let i = 1; i <= fivRem / 100; i++) \{\
+   if (cid[4][1] - one >= 1) \{\
+    one += 1;\
+     rem -= 100;\
+     //push twenty\
+ \}\
+ \} change.push(["ONE", one])\
+  let oneRem = rem;\
+  for (let i = 1; i <= oneRem / 25; i++) \{\
+   if (cid[3][1] - quarter >= 0.25) \{\
+    quarter += 0.25;\
+     rem -= 25;\
+     //push twenty\
+ \}\
+ \} change.push(["QUARTER", quarter])\
+  let quaRem = rem;\
+  for (let i = 1; i <= quaRem / 10; i++) \{\
+   if (cid[2][1] - dime >= 0.1) \{\
+    dime += 0.1;\
+     rem -= 10;\
+     //push twenty\
+ \}\
+ \} change.push(["DIME", dime])\
+  let dimRem = rem;\
+  for (let i = 1; i <= dimRem / 5; i++) \{\
+   if (cid[1][1] * 100 - hunNickel >= 5) \{\
+    hunNickel += 5;\
+     rem -= 5;\
+     //push twenty\
+ \}\
+ \} let nickel = hunNickel / 100;\
+     change.push(["NICKEL", nickel])\
+  let nicRem = rem;\
+  for (let i = 1; i <= nicRem / 1; i++) \{\
+   if (cid[0][1] * 100 - hunPenny >= 1) \{\
+    hunPenny += 1;\
+     rem -= 1;\
+     //push twenty\
+ \}\
+ \} let penny = hunPenny / 100;\
+     change.push(["PENNY", penny])\
+  if (rem > 0) \{\
+    return (\{status: "INSUFFICIENT_FUNDS", change: []\})\
+  \}\
+  if (rem == 0) \{\
+    if (orgRem === funds) \{\
+      let revChange = [];\
+      for (let i = 0; i < 9; i++) \{\
+        let popped = change.pop();\
+        revChange.push(popped);\
+      \}\
+      return (\{status: "CLOSED", change: revChange\})\
+    \} else if (orgRem < funds)\
+    \{\
+    let newChange = change.filter(val => val[1] != 0)\
+    return (\{status: "OPEN", change: newChange\})\
+  \}\
+  \}\
+\}\
+console.log(checkCashRegister(19.5, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]));}
